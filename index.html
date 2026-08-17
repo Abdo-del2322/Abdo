@@ -1,619 +1,301 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اختبار أساسيات الكمبيوتر</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-light: #eef2ff;
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
-  --card-bg: rgba(255, 255, 255, 0.95);
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
-  --success: #10b981;
-  --danger: #ef4444;
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-  --radius: 16px;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Cairo', sans-serif;
-}
-
-body {
-  background: var(--bg-gradient);
-  color: var(--text-main);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow-x: hidden;
-}
-
-.bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-              radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
-  z-index: -1;
-  pointer-events: none;
-}
-
-.topbar {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 20px 24px;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 900px;
-  margin: 0 auto 30px auto;
-  width: 90%;
-  border-radius: 0 0 var(--radius) var(--radius);
-  box-shadow: var(--shadow-lg);
-}
-
-.eyebrow {
-  font-size: 0.85rem;
-  color: #818cf8;
-  font-weight: 700;
-}
-
-.topbar h1 {
-  font-size: 1.7rem;
-  font-weight: 800;
-  margin: 2px 0;
-}
-
-.topbar p {
-  color: #94a3b8;
-  font-size: 0.85rem;
-}
-
-.badge {
-  background: rgba(99, 102, 241, 0.2);
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  color: #c7d2fe;
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.container {
-  max-width: 850px;
-  width: 90%;
-  margin: 0 auto 40px auto;
-  flex: 1;
-}
-
-.card {
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: var(--shadow-lg);
-  margin-bottom: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hidden {
-  display: none !important;
-}
-
-button.primary {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-}
-
-button.primary:hover {
-  background: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
-}
-
-button.secondary {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid var(--border-color);
-  padding: 12px 30px;
-  font-size: 1rem;
-  font-weight: 700;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-button.secondary:hover {
-  background: #e2e8f0;
-}
-
-.exam-head {
-  position: sticky;
-  top: 15px;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  border-right: 5px solid var(--primary);
-  padding: 16px 20px;
-}
-
-.exam-head > div:first-child {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  font-size: 1rem;
-}
-
-.progress-wrap {
-  width: 100%;
-  height: 8px;
-  background: #e2e8f0;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-#progressBar {
-  height: 100%;
-  background: linear-gradient(90deg, #6366f1, #a855f7);
-  width: 0%;
-  transition: width 0.3s ease;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin: 35px 0 20px 0;
-  color: white;
-}
-
-.section-title span {
-  background: var(--primary);
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
-}
-
-.section-title h3 {
-  font-size: 1.2rem;
-}
-
-.question {
-  position: relative;
-  display: flex;
-  gap: 16px;
-  border-right: 4px solid transparent;
-}
-
-.q-number {
-  background: #f1f5f9;
-  color: #475569;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-.q-content {
-  flex: 1;
-}
-
-.q-text {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 16px;
-  line-height: 1.6;
-}
-
-.options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: #fff;
-}
-
-.option:hover {
-  border-color: #a5b4fc;
-  background: var(--primary-light);
-}
-
-.option input {
-  display: none;
-}
-
-.radio {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #cbd5e1;
-  border-radius: 50%;
-  position: relative;
-  transition: all 0.2s;
-}
-
-.option input:checked + .radio {
-  border-color: var(--primary);
-  background: var(--primary);
-}
-
-.option input:checked + .radio::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 7px;
-  height: 7px;
-  background: white;
-  border-radius: 50%;
-}
-
-.option input:checked ~ span:last-child {
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.essay-input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  font-size: 0.95rem;
-  outline: none;
-  transition: all 0.2s;
-  min-height: 100px;
-  resize: vertical;
-}
-
-.essay-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px var(--primary-light);
-}
-
-.manual-note {
-  margin-top: 10px;
-  font-size: 0.85rem;
-  color: #854d0e;
-  background: #fef9c3;
-  padding: 8px 12px;
-  border-radius: 8px;
-}
-
-.question.correct {
-  border-right-color: var(--success);
-  background: rgba(236, 253, 245, 0.6);
-}
-
-.question.wrong {
-  border-right-color: var(--danger);
-  background: rgba(254, 242, 242, 0.6);
-}
-
-.result-card {
-  text-align: center;
-  padding: 40px 30px;
-}
-
-.result-icon {
-  font-size: 3.5rem;
-  margin-bottom: 10px;
-}
-
-.score-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
-  margin: 25px 0;
-}
-
-.score-grid > div {
-  background: #f8fafc;
-  border: 1px solid var(--border-color);
-  padding: 14px 10px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.score-grid span {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
-
-.score-grid b {
-  font-size: 1.3rem;
-  color: #0f172a;
-}
-
-.result-message {
-  font-size: 1.3rem;
-  font-weight: 800;
-  margin-bottom: 25px;
-  color: var(--primary);
-}
-
-.submit-wrap {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #94a3b8;
-  font-size: 0.85rem;
-  margin-top: auto;
-}
-
-@media (max-width: 640px) {
-  .topbar {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-  .score-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .actions {
-    flex-direction: column;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار أساسيات الكمبيوتر الشامل</title>
+  <style>
+    :root {
+      --bg-color: #0d1117;
+      --card-bg: #161b22;
+      --accent: #58a6ff;
+      --text: #c9d1d9;
+      --text-white: #ffffff;
+      --success: #238636;
+      --error: #da3633;
+      --border: #30363d;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+    header {
+      text-align: center;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    h1 { color: var(--text-white); margin-bottom: 5px; }
+    .progress-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .q-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .q-num {
+      color: var(--accent);
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .q-text {
+      color: var(--text-white);
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+      white-space: pre-line;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .option-btn {
+      background: #21262d;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 6px;
+      text-align: right;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .option-btn:hover { background: #30363d; }
+    .option-btn.correct { background: var(--success) !important; color: white; }
+    .option-btn.wrong { background: var(--error) !important; color: white; }
+    .explanation {
+      margin-top: 15px;
+      padding: 10px;
+      background: #1c2128;
+      border-right: 4px solid var(--accent);
+      border-radius: 4px;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .text-input-area {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    input[type="text"], textarea {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      color: white;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .submit-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: fit-content;
+    }
+  </style>
 </head>
 <body>
-<div class="bg"></div>
-<header class="topbar">
-  <div>
-    <div class="eyebrow">اختبار تفاعلي</div>
-    <h1>أساسيات الكمبيوتر</h1>
-    <p>اختبار شامل في Hardware • Software • Data • Information • Binary & Decimal</p>
+
+<div class="container">
+  <header>
+    <h1>اختبار أساسيات الكمبيوتر الشامل</h1>
+    <p>اختبار تفاعلي شامل لكافة المفاهيم والنظم العددية</p>
+  </header>
+
+  <div class="progress-bar" id="progress">
+    التقدم: تم إجابة <span id="answered-count">0</span> من <span id="total-count">0</span>
   </div>
-  <div class="badge">RTL • عربي</div>
-</header>
 
-<main class="container">
-  <section id="examCard">
-    <div class="exam-head card">
-      <div>
-        <strong>تقدم الاختبار</strong>
-        <span id="progressText"></span>
-      </div>
-      <div class="progress-wrap">
-        <div id="progressBar"></div>
-      </div>
-    </div>
-    <form id="examForm"></form>
-    <div class="submit-wrap">
-      <button id="submitBtn" type="button" class="primary">إنهاء الاختبار وإظهار النتيجة</button>
-    </div>
-  </section>
-
-  <section id="resultCard" class="card result-card hidden">
-    <div class="result-icon">🏆</div>
-    <h2>نتيجة الاختبار</h2>
-    <div class="score-grid">
-      <div><span>الإجابات الصحيحة</span><b id="correctCount">0</b></div>
-      <div><span>الأخطاء</span><b id="wrongCount">0</b></div>
-      <div><span>الأسئلة الموضوعية</span><b id="objectiveCount">0</b></div>
-      <div><span>المقالية للمراجعة</span><b id="essayCount">0</b></div>
-      <div><span>النسبة الموضوعية</span><b id="percentage">0%</b></div>
-    </div>
-    <div id="resultMessage" class="result-message"></div>
-    <div class="actions">
-      <button id="reviewBtn" class="secondary">مراجعة الإجابات</button>
-      <button id="newBtn" class="primary">اختبار جديد</button>
-    </div>
-  </section>
-</main>
-
-<footer>اختبار أساسيات الكمبيوتر — ملف مستقل يعمل مباشرة على أي استضافة Static Hosting.</footer>
+  <div id="questions-container"></div>
+</div>
 
 <script>
 const QUESTIONS = [
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"الكمبيوتر هو جهاز:","options":["ميكانيكي","إلكتروني","يدوي","ورقي"],"answer":1,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"البيانات التي يدخلها المستخدم إلى الكمبيوتر تسمى:","options":["Output","Processing","Input","Storage"],"answer":2,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"العملية التي يقوم فيها الكمبيوتر بمعالجة البيانات وفقًا للتعليمات تسمى:","options":["Input","Processing","Output","Storage"],"answer":1,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"النتائج المفيدة التي يحصل عليها المستخدم تسمى:","options":["Input","Data","Output","Hardware"],"answer":2,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"أي مما يلي يعتبر من وحدات الإدخال؟","options":["الشاشة","الطابعة","لوحة المفاتيح","السماعة"],"answer":2,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"أي مما يلي يعتبر Hardware؟","options":["Windows","Google Chrome","Keyboard","Microsoft Word"],"answer":2,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"أي مما يلي يعتبر Software؟","options":["Mouse","RAM","CPU","Windows"],"answer":3,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"عقل الكمبيوتر هو:","options":["RAM","CPU","Hard Disk","Keyboard"],"answer":1,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"الذاكرة المؤقتة التي تخزن البيانات أثناء تشغيل البرامج هي:","options":["RAM","Hard Disk","Monitor","Mouse"],"answer":0,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"الوحدة التي تخزن البيانات حتى بعد إيقاف تشغيل الكمبيوتر هي:","options":["RAM","CPU","Storage","Keyboard"],"answer":2,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"الكمبيوتر يفهم داخليًا لغة مكونة من:","options":["0 و1","1 و2","0 إلى 9","A وB"],"answer":0,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"تسمى اللغة التي تعتمد على 0 و1:","options":["Decimal Language","Binary Language","Human Language","Programming Language"],"answer":1,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"النظام العشري يستخدم:","options":["رقمين","8 أرقام","10 أرقام","16 رقمًا"],"answer":2,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"النظام الثنائي هو نظام أساسه:","options":["2","8","10","16"],"answer":0,"explanation":"","points":1},
-  {"section":"اختر الإجابة الصحيحة","type":"mcq","question":"النظام العشري هو نظام أساسه:","options":["2","5","8","10"],"answer":3,"explanation":"","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"الكمبيوتر يفهم الكلمات والصور مباشرة كما يفهمها الإنسان.","options":["صح","خطأ"],"answer":1,"explanation":"الكمبيوتر يحول البيانات إلى صورة رقمية تعتمد على 0 و1 لمعالجتها.","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"الـ Hardware هو الأجزاء التي يمكن رؤيتها ولمسها.","options":["صح","خطأ"],"answer":0,"explanation":"","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"برنامج Microsoft Word يعتبر Hardware.","options":["صح","خطأ"],"answer":1,"explanation":"Microsoft Word يعتبر Software.","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"الماوس ولوحة المفاتيح من Input Devices.","options":["صح","خطأ"],"answer":0,"explanation":"","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"الشاشة تعتبر Output Device.","options":["صح","خطأ"],"answer":0,"explanation":"","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"RAM تخزن البيانات بشكل مؤقت أثناء تشغيل البرامج.","options":["صح","خطأ"],"answer":0,"explanation":"","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"Storage تفقد البيانات بمجرد إيقاف تشغيل الكمبيوتر.","options":["صح","خطأ"],"answer":1,"explanation":"التخزين يحتفظ بالبيانات حتى بعد إيقاف التشغيل.","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"Binary System يستخدم الرقمين 0 و1 فقط.","options":["صح","خطأ"],"answer":0,"explanation":"","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"Decimal System يستخدم الرقمين 0 و1 فقط.","options":["صح","خطأ"],"answer":1,"explanation":"يستخدم الأرقام من 0 إلى 9.","points":1},
-  {"section":"صح أم خطأ","type":"tf","question":"Data هي معلومات تمت معالجتها وأصبحت مفيدة.","options":["صح","خطأ"],"answer":1,"explanation":"دي Information، أما Data فهي حقائق وبيانات خام.","points":1},
-  {"section":"علل","type":"essay","question":"لماذا لا نقول إن Microsoft Word من الـ Hardware?","options":[],"answer":"لأنه برنامج وتعليمات لا يمكن لمسها كقطعة مادية، ولذلك فهو Software.","explanation":"","points":0},
-  {"section":"علل","type":"essay","question":"لماذا تعتبر لوحة المفاتيح Input Device?","options":[],"answer":"لأنها تستخدم لإدخال البيانات والأوامر إلى الكمبيوتر.","explanation":"","points":0},
-  {"section":"علل","type":"essay","question":"لماذا يعتبر Monitor من Output Devices?","options":[],"answer":"لأنه يعرض النتائج للمستخدم.","explanation":"","points":0},
-  {"section":"علل","type":"essay","question":"لماذا يعتبر CPU عقل الكمبيوتر?","options":[],"answer":"لأنه ينفذ التعليمات ويعالج البيانات.","explanation":"","points":0},
-  {"section":"علل","type":"essay","question":"لماذا نحتاج إلى Storage?","options":[],"answer":"لتخزين البيانات والملفات والنتائج بحيث يمكن استرجاعها لاحقًا حتى بعد إيقاف تشغيل الجهاز.","explanation":"","points":0},
-  {"section":"علل","type":"essay","question":"لماذا تعتبر RAM ذاكرة مؤقتة?","options":[],"answer":"لأنها تخزن البيانات أثناء تشغيل البرامج، وليست للتخزين الدائم.","explanation":"","points":0}
+  // أولاً: أسئلة سهلة
+  { type: 'mcq', q: "الكمبيوتر هو جهاز:", options: ["أ) ميكانيكي", "ب) إلكتروني", "ج) يدوي", "د) ورقي"], ans: 1, exp: "الإجابة الصحيحة: إلكتروني." },
+  { type: 'mcq', q: "البيانات التي يدخلها المستخدم إلى الكمبيوتر تسمى:", options: ["أ) Output", "ب) Processing", "ج) Input", "د) Storage"], ans: 2, exp: "الإجابة الصحيحة: Input." },
+  { type: 'mcq', q: "العملية التي يقوم فيها الكمبيوتر بمعالجة البيانات وفقًا للتعليمات تسمى:", options: ["أ) Input", "ب) Processing", "ج) Output", "د) Storage"], ans: 1, exp: "الإجابة الصحيحة: Processing." },
+  { type: 'mcq', q: "النتائج المفيدة التي يحصل عليها المستخدم تسمى:", options: ["أ) Input", "ب) Data", "ج) Output", "د) Hardware"], ans: 2, exp: "الإجابة الصحيحة: Output." },
+  { type: 'mcq', q: "أي مما يلي يعتبر من وحدات الإدخال؟", options: ["أ) الشاشة", "ب) الطابعة", "ج) لوحة المفاتيح", "د) السماعة"], ans: 2, exp: "الإجابة الصحيحة: لوحة المفاتيح." },
+  { type: 'mcq', q: "أي مما يلي يعتبر Hardware؟", options: ["أ) Windows", "ب) Google Chrome", "ج) Keyboard", "د) Microsoft Word"], ans: 2, exp: "الإجابة الصحيحة: Keyboard." },
+  { type: 'mcq', q: "أي مما يلي يعتبر Software؟", options: ["أ) Mouse", "ب) RAM", "ج) CPU", "د) Windows"], ans: 3, exp: "الإجابة الصحيحة: Windows." },
+  { type: 'mcq', q: "عقل الكمبيوتر هو:", options: ["أ) RAM", "ب) CPU", "ج) Hard Disk", "د) Keyboard"], ans: 1, exp: "الإجابة الصحيحة: CPU." },
+  { type: 'mcq', q: "الذاكرة المؤقتة التي تخزن البيانات أثناء تشغيل البرامج هي:", options: ["أ) RAM", "ب) Hard Disk", "ج) Monitor", "د) Mouse"], ans: 0, exp: "الإجابة الصحيحة: RAM." },
+  { type: 'mcq', q: "الوحدة التي تخزن البيانات حتى بعد إيقاف تشغيل الكمبيوتر هي:", options: ["أ) RAM", "ب) CPU", "ج) Storage", "د) Keyboard"], ans: 2, exp: "الإجابة الصحيحة: Storage." },
+  { type: 'mcq', q: "الكمبيوتر يفهم داخليًا لغة مكونة من:", options: ["أ) 0 و1", "ب) 1 و2", "ج) 0 إلى 9", "د) A وB"], ans: 0, exp: "الإجابة الصحيحة: 0 و1." },
+  { type: 'mcq', q: "تسمى اللغة التي تعتمد على 0 و1:", options: ["أ) Decimal Language", "ب) Binary Language", "ج) Human Language", "د) Programming Language"], ans: 1, exp: "الإجابة الصحيحة: Binary Language." },
+  { type: 'mcq', q: "النظام العشري يستخدم:", options: ["أ) رقمين", "ب) 8 أرقام", "ج) 10 أرقام", "د) 16 رقمًا"], ans: 2, exp: "الإجابة الصحيحة: 10 أرقام." },
+  { type: 'mcq', q: "النظام الثنائي هو نظام أساسه:", options: ["أ) 2", "ب) 8", "ج) 10", "د) 16"], ans: 0, exp: "الإجابة الصحيحة: 2." },
+  { type: 'mcq', q: "النظام العشري هو نظام أساسه:", options: ["أ) 2", "ب) 5", "ج) 8", "د) 10"], ans: 3, exp: "الإجابة الصحيحة: 10." },
+  
+  // صح أم خطأ
+  { type: 'mcq', q: "الكمبيوتر يفهم الكلمات والصور مباشرة كما يفهمها الإنسان.", options: ["صح", "خطأ"], ans: 1, exp: "❌ خطأ. الكمبيوتر يحول البيانات إلى صورة رقمية تعتمد على 0 و1 لمعالجتها." },
+  { type: 'mcq', q: "الـ Hardware هو الأجزاء التي يمكن رؤيتها ولمسها.", options: ["صح", "خطأ"], ans: 0, exp: "✅ صح." },
+  { type: 'mcq', q: "برنامج Microsoft Word يعتبر Hardware.", options: ["صح", "خطأ"], ans: 1, exp: "❌ خطأ. Microsoft Word يعتبر Software." },
+  { type: 'mcq', q: "الماوس ولوحة المفاتيح من Input Devices.", options: ["صح", "خطأ"], ans: 0, exp: "✅ صح." },
+  { type: 'mcq', q: "الشاشة تعتبر Output Device.", options: ["صح", "خطأ"], ans: 0, exp: "✅ صح." },
+  { type: 'mcq', q: "RAM تخزن البيانات بشكل مؤقت أثناء تشغيل البرامج.", options: ["صح", "خطأ"], ans: 0, exp: "✅ صح." },
+  { type: 'mcq', q: "Storage تفقد البيانات بمجرد إيقاف تشغيل الكمبيوتر.", options: ["صح", "خطأ"], ans: 1, exp: "❌ خطأ. التخزين يحتفظ بالبيانات حتى بعد إيقاف التشغيل." },
+  { type: 'mcq', q: "Binary System يستخدم الرقمين 0 و1 فقط.", options: ["صح", "خطأ"], ans: 0, exp: "✅ صح." },
+  { type: 'mcq', q: "Decimal System يستخدم الرقمين 0 و1 فقط.", options: ["صح", "خطأ"], ans: 1, exp: "❌ خطأ. يستخدم الأرقام من 0 إلى 9." },
+  { type: 'mcq', q: "Data هي معلومات تمت معالجتها وأصبحت مفيدة.", options: ["صح", "خطأ"], ans: 1, exp: "❌ خطأ. دي Information، أما Data فهي حقائق وبيانات خام." },
+
+  // ثانياً: أسئلة متوسطة (أكمل وأختر)
+  { type: 'mcq', q: "أي ترتيب يمثل دورة عمل الكمبيوتر بشكل صحيح؟", options: ["أ) Output → Input → Storage → Processing", "ب) Input → Processing → Storage → Output", "ج) Storage → Output → Input → Processing", "د) Processing → Input → Output → Storage"], ans: 1, exp: "الإجابة الصحيحة: Input → Processing → Storage → Output." },
+  { type: 'mcq', q: "إذا كتبت اسمك باستخدام لوحة المفاتيح، فإن لوحة المفاتيح تعتبر:", options: ["أ) Output", "ب) Input", "ج) Storage", "د) Processing"], ans: 1, exp: "الإجابة الصحيحة: Input." },
+  { type: 'mcq', q: "عندما يعالج CPU البيانات، فإن هذا يسمى:", options: ["أ) Storage", "ب) Processing", "ج) Input", "د) Output"], ans: 1, exp: "الإجابة الصحيحة: Processing." },
+  { type: 'mcq', q: "أي من التالي يمكن لمسه؟", options: ["أ) Windows", "ب) Google Chrome", "ج) Keyboard", "د) Microsoft Word"], ans: 2, exp: "الإجابة الصحيحة: Keyboard." },
+  { type: 'mcq', q: "أي من التالي لا يمكن لمسه كقطعة مادية؟", options: ["أ) Mouse", "ب) Monitor", "ج) RAM", "د) Paint"], ans: 3, exp: "الإجابة الصحيحة: Paint." },
+  { type: 'mcq', q: "أي مما يلي يمثل Information وليس Data؟", options: ["أ) 70, 85, 50, 90", "ب) A, B, C", "ج) متوسط درجات الطلاب = 69.3", "د) 52, 8, 13"], ans: 2, exp: "الإجابة الصحيحة: متوسط درجات الطلاب = 69.3." },
+  { type: 'mcq', q: "درجات الطلاب قبل ترتيبها وتحليلها تعتبر:", options: ["أ) Information", "ب) Data", "ج) Output Device", "د) Software"], ans: 1, exp: "الإجابة الصحيحة: Data." },
+  { type: 'mcq', q: "تقرير يوضح أعلى درجة وأقل درجة ومتوسط درجات الطلاب يعتبر:", options: ["أ) Data", "ب) Raw Data", "ج) Information", "د) Hardware"], ans: 2, exp: "الإجابة الصحيحة: Information." },
+
+  // أسئلة علل وإكمال مقالية
+  { type: 'text', q: "أكمل: الكمبيوتر يستقبل البيانات من المستخدم كـ ______ ثم يعالجها ويعطي ______.", ans: ["Input", "Output"], exp: "الإجابة النموذجية: Input — Output." },
+  { type: 'text', q: "أكمل: المكونات المادية للكمبيوتر تسمى ______.", ans: ["Hardware"], exp: "الإجابة: Hardware." },
+  { type: 'text', q: "أكمل: البرامج والتعليمات التي تجعل الكمبيوتر يعمل تسمى ______.", ans: ["Software"], exp: "الإجابة: Software." },
+  { type: 'text', q: "أكمل: الـ ______ ينفذ التعليمات ويعالج البيانات.", ans: ["CPU"], exp: "الإجابة: CPU." },
+  { type: 'text', q: "أكمل: الـ ______ هي ذاكرة مؤقتة تخزن البيانات أثناء تشغيل البرامج.", ans: ["RAM"], exp: "الإجابة: RAM." },
+  { type: 'text', q: "أكمل: البيانات الخام التي ليس لها معنى واضح بمفردها تسمى ______.", ans: ["Data"], exp: "الإجابة: Data." },
+  { type: 'text', q: "أكمل: البيانات التي تمت معالجتها وتنظيمها وأصبحت ذات معنى تسمى ______.", ans: ["Information"], exp: "الإجابة: Information." },
+  { type: 'text', q: "أكمل: تحويل البيانات من شكلها التناظري إلى شكل رقمي يعتمد على 0 و1 يسمى ______.", ans: ["Digitization"], exp: "الإجابة: Digitization." },
+  { type: 'text', q: "أكمل: النظام الذي يستخدم الأرقام من 0 إلى 9 يسمى النظام ______.", ans: ["العشري", "Decimal"], exp: "الإجابة: العشري Decimal." },
+  { type: 'text', q: "أكمل: النظام الذي يستخدم 0 و1 فقط يسمى النظام ______.", ans: ["الثنائي", "Binary"], exp: "الإجابة: الثنائي Binary." },
+
+  { type: 'text', q: "علل: لماذا لا نقول إن Microsoft Word من الـ Hardware؟", ans: [], exp: "الإجابة: لأنه برنامج وتعليمات لا يمكن لمسها كقطعة مادية، ولذلك فهو Software." },
+  { type: 'text', q: "علل: لماذا تعتبر لوحة المفاتيح Input Device؟", ans: [], exp: "الإجابة: لأنها تستخدم لإدخال البيانات والأوامر إلى الكمبيوتر." },
+  { type: 'text', q: "علل: لماذا يعتبر Monitor من Output Devices؟", ans: [], exp: "الإجابة: لأنه يعرض النتائج للمستخدم." },
+  { type: 'text', q: "علل: لماذا يعتبر CPU عقل الكمبيوتر؟", ans: [], exp: "الإجابة: لأنه ينفذ التعليمات ويعالج البيانات." },
+  { type: 'text', q: "علل: لماذا نحتاج إلى Storage؟", ans: [], exp: "الإجابة: لتخزين البيانات والملفات والنتائج بحيث يمكن استرجاعها لاحقًا حتى بعد إيقاف تشغيل الجهاز." },
+  { type: 'text', q: "علل: لماذا تعتبر RAM ذاكرة مؤقتة؟", ans: [], exp: "الإجابة: لأنها تخزن البيانات أثناء تشغيل البرامج، وليست للتخزين الدائم." },
+
+  // ثالثاً: أسئلة فهم وتحويلات
+  { type: 'text', q: "قام طالب بكتابة الرقم 90 باستخدام لوحة المفاتيح، ثم قام الكمبيوتر بحساب متوسط درجاته وعرض النتيجة على الشاشة. حدد الـ Input و Processing و Output.", ans: [], exp: "Input: الرقم 90 عبر لوحة المفاتيح.\nProcessing: حساب المتوسط بواسطة CPU.\nOutput: ظهور النتيجة على الشاشة." },
+  { type: 'text', q: "عند الضغط على أيقونة الكاميرا في الهاتف، ماذا يحدث وفق خطوات فهم الكمبيوتر للأوامر؟", ans: [], exp: "1. المستخدم يضغط على الأيقونة → Input\n2. الأمر يتحول إلى تمثيل ثنائي → Binary\n3. المعالجة → Processing\n4. فتح الكاميرا → Output" },
+  { type: 'text', q: "لديك الدرجات: 70, 85, 50, 90, 60, 75, 55. هل هذه Data أم Information؟ ولماذا؟", ans: [], exp: "Data؛ لأنها درجات خام لم يتم تنظيمها أو تحليلها بعد." },
+  { type: 'text', q: "إذا قمنا بحساب متوسط الدرجات السابقة وأظهرنا أعلى وأقل درجة، ماذا أصبحت البيانات؟", ans: [], exp: "أصبحت Information؛ لأنها عولجت ونُظمت وأصبح لها معنى وفائدة." },
+  { type: 'text', q: "إذا كان لديك صورة ورقية قديمة وقمت باستخدام Scanner لتحويلها إلى صورة على الكمبيوتر، فما العملية التي حدثت؟", ans: [], exp: "Digitization (الرقمنة)." },
+  { type: 'text', q: "رتب خطوات تحويل صورة ورقية إلى صورة رقمية:\n(الحصول على الصورة الرقمية - وضع الصورة في Scanner - تحويل البيانات إلى شكل رقمي - وجود الصورة الورقية)", ans: [], exp: "1. وجود الصورة الورقية.\n2. وضعها في Scanner.\n3. تحويلها إلى بيانات رقمية.\n4. الحصول على الصورة الرقمية." },
+  { type: 'text', q: "لماذا لا يستطيع الكمبيوتر معالجة صورة ورقية كما هي؟", ans: [], exp: "لأن الكمبيوتر يتعامل مع البيانات في صورة رقمية (0 و1) فقط، فيجب تحويل البيانات التناظرية إلى رقمية." },
+
+  // النظم العددية والتحويلات
+  { type: 'text', q: "ما الأرقام التي يستخدمها النظام الثنائي؟", ans: ["0 و1", "0,1"], exp: "الإجابة: 0 و1." },
+  { type: 'text', q: "ما الأرقام التي يستخدمها النظام العشري؟", ans: ["من 0 إلى 9", "0-9"], exp: "الإجابة: من 0 إلى 9." },
+  { type: 'text', q: "ما قيمة الخانة الأولى من اليمين في النظام الثنائي؟", ans: ["1"], exp: "الإجابة: 2⁰ = 1." },
+  { type: 'text', q: "ما قيمة الخانة الثانية من اليمين؟", ans: ["2"], exp: "الإجابة: 2¹ = 2." },
+  { type: 'text', q: "ما قيمة الخانة الثالثة من اليمين؟", ans: ["4"], exp: "الإجابة: 2² = 4." },
+  { type: 'text', q: "ما قيمة الخانة الرابعة من اليمين؟", ans: ["8"], exp: "الإجابة: 2³ = 8." },
+
+  { type: 'text', q: "حوّل 1011₂ إلى Decimal.", ans: ["11"], exp: "الحل: 1×8 + 0×4 + 1×2 + 1×1 = 11" },
+  { type: 'text', q: "حوّل 1010₂ إلى Decimal.", ans: ["10"], exp: "الحل: 1×8 + 0×4 + 1×2 + 0×1 = 10" },
+  { type: 'text', q: "حوّل 1101₂ إلى Decimal.", ans: ["13"], exp: "الحل: 1×8 + 1×4 + 0×2 + 1×1 = 13" },
+  { type: 'text', q: "حوّل 1001₂ إلى Decimal.", ans: ["9"], exp: "الحل: 1×8 + 0×4 + 0×2 + 1×1 = 9" },
+  { type: 'text', q: "حوّل 1111₂ إلى Decimal.", ans: ["15"], exp: "الحل: 8 + 4 + 2 + 1 = 15" },
+
+  { type: 'text', q: "حوّل 10₁₀ إلى Binary.", ans: ["1010"], exp: "الإجابة: 1010₂" },
+  { type: 'text', q: "حوّل 11₁₀ إلى Binary.", ans: ["1011"], exp: "الإجابة: 1011₂" },
+  { type: 'text', q: "حوّل 13₁₀ إلى Binary.", ans: ["1101"], exp: "الإجابة: 1101₂" },
+  { type: 'text', q: "حوّل 15₁₀ إلى Binary.", ans: ["1111"], exp: "الإجابة: 1111₂" },
+  { type: 'text', q: "حوّل 25₁₀ إلى Binary.", ans: ["11001"], exp: "الإجابة: 11001₂" },
+
+  // خامساً وسادساً: المقارنات والأسئلة المتقدمة والتحدي
+  { type: 'text', q: "قارن بين Data و Information.", ans: [], exp: "Data: بيانات خام غير منظمة قد لا يكون لها معنى بمفردها.\nInformation: بيانات تمت معالجتها وتنظيمها ولها معنى مفيد للتأخذ قرار." },
+  { type: 'text', q: "قارن بين Hardware و Software.", ans: [], exp: "Hardware: الأجزاء المادية الملموسة مثل Mouse وCPU.\nSoftware: البرامج والتعليمات البرمجية مثل Windows وWord." },
+  { type: 'text', q: "طالب قال: 'كل ما يظهر على شاشة الكمبيوتر يعتبر Input لأن المستخدم يراه'. هل كلامه صحيح؟ وضح.", ans: [], exp: "❌ غير صحيح. الشاشة من Output Devices لأنها تعرض النتائج، بينما Input هو البيانات المدخلة للجهاز." },
+  { type: 'text', q: "طالب قال: 'RAM و Hard Disk نفس الوظيفة لأن الاثنين يخزنون البيانات'. هل العبارة صحيحة؟", ans: [], exp: "❌ غير صحيحة. RAM ذاكرة مؤقتة أثناء التشغيل فقط، بينما Storage/Hard Disk تخزين دائم." },
+  { type: 'text', q: "إذا كان الكمبيوتر لا يفهم الأمر 'Open Camera' باللغة البشرية مباشرة، فما الذي يحدث لهذا الأمر قبل تنفيذه؟", ans: [], exp: "يتم تحويله لتمثيل ثنائي (0 و1)، ثم يعالجه الكمبيوتر وينفذه." },
+  { type: 'text', q: "لماذا يمكن للكمبيوتر تخزين الصوت والصور والفيديو والنصوص رغم أنها أشياء مختلفة؟", ans: [], exp: "لأن جميع تلك البيانات يتم تحويلها إلى شكل رقمي وحفظها كأصفار وآحاد (0 و1)." },
+  { type: 'text', q: "أيهما يأتي أولًا: Data أم Information؟ ولماذا؟", ans: [], exp: "Data تأتي أولاً لأنها المدخلات الخام التي تتم معالجتها لتصبح Information." },
+  { type: 'text', q: "إذا كانت درجات 7 طلاب هي (70, 85, 50, 90, 60, 75, 55)، احسب المتوسط وحدد أعلى وأقل درجة، وهل النتيجة Data أم Information؟", ans: [], exp: "أعلى درجة: 90\nأقل درجة: 50\nالمتوسط: 485 ÷ 7 = 69.3 تقريباً.\nالنتيجة تعتبر Information لأنها ناتجة عن معالجة البيانات الخام." }
 ];
 
-function renderExam() {
-  const form = document.getElementById('examForm');
-  form.innerHTML = '';
-  let currentSection = '';
+let answeredSet = new Set();
+
+function renderQuestions() {
+  const container = document.getElementById('questions-container');
+  document.getElementById('total-count').innerText = QUESTIONS.length;
 
   QUESTIONS.forEach((q, index) => {
-    if (q.section !== currentSection) {
-      currentSection = q.section;
-      const secHeader = document.createElement('div');
-      secHeader.className = 'section-title';
-      secHeader.innerHTML = `<span>${index + 1}</span><div><h3>${currentSection}</h3></div>`;
-      form.appendChild(secHeader);
-    }
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    
+    let html = `<div class="q-num">سؤال ${index + 1}</div>`;
+    html += `<div class="q-text">${q.q}</div>`;
 
-    const qCard = document.createElement('div');
-    qCard.className = 'card question';
-    qCard.id = `q_${index}`;
-
-    let optionsHTML = '';
-    if (q.type === 'mcq' || q.type === 'tf') {
-      optionsHTML = `<div class="options">` +
-        q.options.map((opt, i) => `
-          <label class="option">
-            <input type="radio" name="q_${index}" value="${i}">
-            <span class="radio"></span>
-            <span>${opt}</span>
-          </label>
-        `).join('') + `</div>`;
-    } else if (q.type === 'essay') {
-      optionsHTML = `
-        <textarea class="essay-input" name="q_${index}" placeholder="اكتب إجابتك هنا..."></textarea>
-        <div class="manual-note">ℹ️ هذا السؤال مقالي ويظهر للمراجعة الذاتية أو اليدوية.</div>
+    if (q.type === 'mcq') {
+      html += `<div class="options">`;
+      q.options.forEach((opt, optIdx) => {
+        html += `<button class="option-btn" onclick="checkMcq(${index}, ${optIdx}, this)">${opt}</button>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `
+        <div class="text-input-area">
+          <textarea id="input-${index}" rows="2" placeholder="اكتب إجابتك هنا..."></textarea>
+          <button class="submit-btn" onclick="checkText(${index})">تحقق من الإجابة</button>
+        </div>
       `;
     }
 
-    qCard.innerHTML = `
-      <div class="q-number">${index + 1}</div>
-      <div class="q-content">
-        <div class="q-text">${q.question}</div>
-        ${optionsHTML}
-      </div>
-    `;
-    form.appendChild(qCard);
+    html += `<div class="explanation" id="exp-${index}">${q.exp.replace(/\n/g, '<br>')}</div>`;
+    card.innerHTML = html;
+    container.appendChild(card);
   });
-
-  updateProgress();
-  form.addEventListener('change', updateProgress);
 }
 
-function updateProgress() {
-  let answered = 0;
-  QUESTIONS.forEach((q, index) => {
-    if (q.type === 'mcq' || q.type === 'tf') {
-      if (document.querySelector(`input[name="q_${index}"]:checked`)) answered++;
-    } else {
-      const txt = document.querySelector(`textarea[name="q_${index}"]`);
-      if (txt && txt.value.trim() !== '') answered++;
-    }
-  });
-
-  const total = QUESTIONS.length;
-  const pct = Math.round((answered / total) * 100);
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressText').textContent = `تم إجابة ${answered} من ${total}`;
+function updateProgress(idx) {
+  answeredSet.add(idx);
+  document.getElementById('answered-count').innerText = answeredSet.size;
 }
 
-document.getElementById('submitBtn').addEventListener('click', function() {
-  let correct = 0;
-  let wrong = 0;
-  let objCount = 0;
-  let essayCount = 0;
+function checkMcq(qIdx, optIdx, btn) {
+  const q = QUESTIONS[qIdx];
+  const parent = btn.parentElement;
+  const buttons = parent.querySelectorAll('.option-btn');
+  
+  buttons.forEach(b => b.disabled = true);
+  
+  if (optIdx === q.ans) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    buttons[q.ans].classList.add('correct');
+  }
 
-  QUESTIONS.forEach((q, index) => {
-    const card = document.getElementById(`q_${index}`);
-    if (q.type === 'mcq' || q.type === 'tf') {
-      objCount++;
-      const selected = document.querySelector(`input[name="q_${index}"]:checked`);
-      if (selected && parseInt(selected.value) === q.answer) {
-        correct++;
-        card.classList.add('correct');
-      } else {
-        wrong++;
-        card.classList.add('wrong');
-      }
-    } else {
-      essayCount++;
-    }
-  });
+  document.getElementById(`exp-${qIdx}`).style.display = 'block';
+  updateProgress(qIdx);
+}
 
-  const pct = Math.round((correct / objCount) * 100) || 0;
+function checkText(qIdx) {
+  document.getElementById(`exp-${qIdx}`).style.display = 'block';
+  updateProgress(qIdx);
+}
 
-  document.getElementById('correctCount').textContent = correct;
-  document.getElementById('wrongCount').textContent = wrong;
-  document.getElementById('objectiveCount').textContent = objCount;
-  document.getElementById('essayCount').textContent = essayCount;
-  document.getElementById('percentage').textContent = pct + '%';
-
-  const msg = document.getElementById('resultMessage');
-  if (pct >= 85) msg.textContent = 'ممتاز! أداء رائع جداً 🎉';
-  else if (pct >= 65) msg.textContent = 'جيد جداً! استمر في التحسن 👍';
-  else msg.textContent = 'تحتاج إلى إلقاء نظرة إضافية على المادة 📚';
-
-  document.getElementById('examCard').classList.add('hidden');
-  document.getElementById('resultCard').classList.remove('hidden');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-document.getElementById('reviewBtn').addEventListener('click', function() {
-  document.getElementById('resultCard').classList.add('hidden');
-  document.getElementById('examCard').classList.remove('hidden');
-});
-
-document.getElementById('newBtn').addEventListener('click', function() {
-  location.reload();
-});
-
-// التشغيل المباشر للاختبار عند فتح الصفحة
-renderExam();
+window.onload = renderQuestions;
 </script>
 </body>
 </html>
+
